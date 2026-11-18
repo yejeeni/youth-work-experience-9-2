@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mbti">
+    
+    <resultMap type="com.spring.board.vo.BoardVo" id="boardVo">
+    	<result property="boardType" 	column="BOARD_TYPE"/>
+    	<result property="boardNum" 	column="BOARD_NUM"/>
+    	<result property="boardTitle" 	column="BOARD_TITLE"/>
+    	<result property="boardComment" column="BOARD_COMMENT"/>
+    </resultMap>
+
+	<select id="mbtiQuestionList" parameterType="com.spring.board.vo.PageVo" resultMap="boardVo">
+	    SELECT BOARD_TYPE
+	    	, BOARD_NUM
+	    	, BOARD_TITLE
+	    	, BOARD_COMMENT
+	    FROM (
+	        SELECT BOARD_TYPE
+	        	, BOARD_NUM
+	        	, BOARD_TITLE
+	        	, BOARD_COMMENT
+	        	, ROW_NUMBER() OVER(ORDER BY
+					CASE WHEN BOARD_TYPE IN ('EI','IE') THEN 1
+						WHEN BOARD_TYPE IN ('NS','SN') THEN 2
+	                    WHEN BOARD_TYPE IN ('FT','TF') THEN 3
+	                    ELSE 4 END
+	            , BOARD_NUM
+	            , BOARD_TYPE) AS NUMROW
+	        FROM BOARD
+	        WHERE BOARD_TYPE IN ('EI','IE','NS','SN','FT','TF','JP','PJ')
+	    )
+	    WHERE NUMROW BETWEEN (#{pageNo}-1)*#{pageSize} + 1 AND (#{pageNo})*#{pageSize}
+	    ORDER BY NUMROW
+	</select>
+	
+	<!-- MBTI 전체 문항 수 -->
+	<select id="mbtiQuestionCnt" resultType="Integer">
+	    SELECT COUNT(*) FROM BOARD
+	    WHERE BOARD_TYPE IN ('EI','IE','NS','SN','FT','TF','JP','PJ')
+	</select>
+    
+</mapper>
