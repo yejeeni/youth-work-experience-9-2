@@ -1,0 +1,54 @@
+# ===== 테스트 프로젝트 (GitHub 업로드 제외) =====
+/test/
+
+# ===== Eclipse 워크스페이스 메타데이터 (개인 IDE 설정, 캐시, 로그) =====
+/.metadata/
+.recommenders/
+RemoteSystemsTempFiles/
+
+# ===== Eclipse 서버 설정 (로컬 Tomcat 환경 전용) =====
+/Servers/
+
+# ===== 빌드 산출물 =====
+build/
+bin/
+target/
+out/
+*.class
+*.war
+
+# ===== Eclipse 설정 =====
+# 워크스페이스 루트의 .project 만 제외
+# (springBoard 의 .project/.classpath/.settings 는 Eclipse 로 import 할 때 필요해서 포함)
+/.project
+.factorypath
+.loadpath
+*.launch
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+
+# ===== 로그 =====
+*.log
+logs/
+
+# ===== OS / 에디터 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.iml
+.vscode/
+
+# ===== 비밀 정보 =====
+.env
+*.env
+.claude/settings.local.json
+
+# DB 접속 정보 (springBoard/src/main/java/db.properties.example 참고)
+db.properties
+
+# 문서 폴더 (GitHub 업로드 제외)
+/springBoard/docs/

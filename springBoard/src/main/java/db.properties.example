@@ -1,0 +1,5 @@
+# 이 파일을 복사해서 같은 폴더에 db.properties 로 저장한 뒤 본인 DB 정보로 바꾸세요.
+db.driver=oracle.jdbc.driver.OracleDriver
+db.url=jdbc:oracle:thin:@localhost:1521/XEPDB1
+db.username=YOUR_USERNAME
+db.password=YOUR_PASSWORD
