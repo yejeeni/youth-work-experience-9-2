@@ -11,14 +11,16 @@ import com.spring.board.service.MbtiService;
 import com.spring.board.vo.BoardVo;
 import com.spring.board.vo.PageVo;
 
+import oracle.security.o3logon.a;
+
 @Service
 public class MbtiServiceImpl implements MbtiService{
 	
 	@Autowired
 	BoardDao boardDao;
-
+	
 	/**
-	 * 선택 결과는 모든 질문의 유형점수를 각 지표에서	더 높은 점수를 받은성격 유형이라고 판단
+	 * 선택 결과는 모든 질문의 유형점수를 각 지표에서 더 높은 점수를 받은 성격 유형이라고 판단
 		
 		EI, IE, NS, SN, FT, TF, JP, PJ
 		
@@ -36,24 +38,53 @@ public class MbtiServiceImpl implements MbtiService{
 	    for (Map.Entry<String, Integer> entry : answers.entrySet()) {
 	    	// Key = FT_2, value = 7
 	    	String type = entry.getKey().split("_")[0]; // type = FT
-	    	int value = 4 - entry.getValue(); // 7 -> -4. (범위: 3 ~ 0 ~ -3)
 	    	
-	    	String frontType = type.substring(0, 1);
-	    	String backType = type.substring(1, 2);
-	    	
-	    	if (value > 0) { // 앞유형
-	    		if (score.get(frontType) == null) {
-		    		score.put(frontType, value);
-	    		} else {
-	    			score.put(frontType, score.get(frontType) + value);
-	    		}
-	    	} else { // 뒷유형
-	    		if (score.get(backType) == null) {
-		    		score.put(backType, - value);
-	    		} else {
-	    			score.put(backType, score.get(backType) - value);
-	    		}
-	    	}
+	    	// 라디오 선택값  1 2 3 4 5 6 7
+	    	// 답변 매우동의  3 2 1 0 1 2 3  매우 비동의
+
+	    	int radioOption = entry.getValue();
+
+	    	String frontType = type.substring(0, 1); // 동의 쪽 유형
+	    	String backType = type.substring(1, 2);  // 비동의 쪽 유형
+	    	String selectType = null; // 점수를 받을 성격 유형
+
+	    	int value = 0; // 받을 점수
+
+	    	switch (radioOption) {
+				case 1: // 매우 동의
+					selectType = frontType;
+					value = 3;
+					break;
+				case 2: // 동의
+					selectType = frontType;
+					value = 2;
+					break;
+				case 3: // 약간 동의
+					selectType = frontType;
+					value = 1;
+					break;
+				case 4: // 모르겠음
+					value = 0;
+					break;
+				case 5: // 약간 비동의
+					selectType = backType;
+					value = 1;
+					break;
+				case 6: // 비동의
+					selectType = backType;
+					value = 2;
+					break;
+				case 7: // 매우 비동의
+					selectType = backType;
+					value = 3;
+					break;
+				default:
+					break;
+			}
+
+		    if (selectType != null && value > 0) { 
+		    	score.put(selectType, score.getOrDefault(selectType, 0) + value);
+		    }
 	    }
 	    
 		// 각 유형 페어에서 더 높은 점수를 받은 성격 유형 찾기

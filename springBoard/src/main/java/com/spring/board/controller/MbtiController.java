@@ -68,7 +68,7 @@ public class MbtiController {
 			String entryKey = e.getKey();
 			if (entryKey.startsWith("answer_")) { // "answer_EI_1".  answer_BOARD_TYPE_BOARD_NUM 형식
 				String key = entryKey.substring("answer_".length()); // "EI_1".  BOARD_TYPE_BOARD_NUM
-				answers.put(key, Integer.parseInt(e.getValue())); // {BOARD_TYPE_BOARD_NUM, 점수}
+				answers.put(key, Integer.parseInt(e.getValue())); // { BOARD_TYPE_BOARD_NUM, 점수 }
 			}
 		}
 	    session.setAttribute("mbtiAnswers", answers);
